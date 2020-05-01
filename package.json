@@ -1,0 +1,31 @@
+{
+  "name": "aws-lambda-image-processor",
+  "version": "0.0.1",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "serve": "tsc --watch",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/lucasfloriani/aws-lambda-image-processor.git"
+  },
+  "keywords": [
+    "node",
+    "typescript",
+    "es6",
+    "AWS",
+    "AWS S3",
+    "AWS Lambda"
+  ],
+  "author": "Lucas Alexander Floriani <lucas.floriane@gmail.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/lucasfloriani/aws-lambda-image-processor/issues"
+  },
+  "homepage": "https://github.com/lucasfloriani/aws-lambda-image-processor#readme",
+  "devDependencies": {
+    "@types/node": "^13.13.4"
+  }
+}
