@@ -1,0 +1,39 @@
+service: aws-lambda-image-processor
+
+plugins:
+  - serverless-dotenv-plugin
+
+provider:
+  name: aws
+  runtime: nodejs8.10
+  stage: dev
+  region: ${env:LAMBDA_REGION}
+  iamRoleStatements:
+    - Effect: Allow
+      Action:
+        - s3:PutObject
+        - s3:PutObjectAcl
+      Resource: "arn:aws:s3:::${env:OUTPUT_BUCKET}/*"
+    - Effect: Allow
+      Action:
+        - s3:GetObject
+        - s3:GetObjectAcl
+      Resource: "arn:aws:s3:::${env:INPUT_BUCKET}/*"
+
+functions:
+  aws-lambda-image-processor:
+    handler: dist/index.handler
+    events:
+      - s3: ${env:INPUT_BUCKET}
+        bucket: ${env:INPUT_BUCKET}
+        event: s3:ObjectCreated:Put
+        rules:
+          - prefix: originals/
+        existing: true
+
+resources:
+  Resources:
+    S3BucketOutputs:
+      Type: AWS::S3::Bucket
+      Properties:
+        BucketName: ${env:OUTPUT_BUCKET}
