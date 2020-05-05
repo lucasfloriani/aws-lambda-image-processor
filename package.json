@@ -4,6 +4,7 @@
   "description": "Boilerplate to process images uploaded to AWS S3 using the lib sharp from node",
   "main": "dist/index.js",
   "scripts": {
+    "deploy": "./node_modules/.bin/tsc && ./node_modules/.bin/serverless deploy -v",
     "lint": "./node_modules/.bin/eslint src/*.ts",
     "serve": "tsc --watch",
     "precommit": "npm run lint"
