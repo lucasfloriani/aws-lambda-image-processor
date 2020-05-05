@@ -23,6 +23,8 @@ provider:
 functions:
   aws-lambda-image-processor:
     handler: dist/index.handler
+    environment:
+      OUTPUT_BUCKET: ${env:OUTPUT_BUCKET}
     events:
       - s3: ${env:INPUT_BUCKET}
         bucket: ${env:INPUT_BUCKET}
