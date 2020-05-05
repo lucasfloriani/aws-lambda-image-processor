@@ -24,7 +24,6 @@ export const handler: AWSLambda.S3Handler = async (event) => {
 
   try {
     const originalFileInBucket = await S3.getObject({ Bucket: bucketName, Key: fileKey }).promise()
-
     const processedImages = await processor(originalFileInBucket.Body as Buffer)
 
     const uploadImages = processedImages.map((imageInfo) => {
