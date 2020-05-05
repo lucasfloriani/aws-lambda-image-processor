@@ -7,6 +7,7 @@ provider:
   name: aws
   runtime: nodejs8.10
   stage: dev
+  profile: default
   region: ${env:LAMBDA_REGION}
   iamRoleStatements:
     - Effect: Allow
@@ -26,16 +27,17 @@ functions:
     environment:
       OUTPUT_BUCKET: ${env:OUTPUT_BUCKET}
     events:
-      - s3: ${env:INPUT_BUCKET}
+      - s3:
         bucket: ${env:INPUT_BUCKET}
         event: s3:ObjectCreated:Put
         rules:
           - prefix: originals/
         existing: true
 
-resources:
-  Resources:
-    S3BucketOutputs:
-      Type: AWS::S3::Bucket
-      Properties:
-        BucketName: ${env:OUTPUT_BUCKET}
+# If the OUTPUT BUCKET wasn't created, remove this commented code to create automatically
+# resources:
+#   Resources:
+#     S3BucketOutputs:
+#       Type: AWS::S3::Bucket
+#       Properties:
+#         BucketName: ${env:OUTPUT_BUCKET}
