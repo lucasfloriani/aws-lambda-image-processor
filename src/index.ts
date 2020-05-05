@@ -1,17 +1,17 @@
 import AWS from 'aws-sdk'
-import sharp from 'sharp'
 import {
   formatURI,
   getFileExtension,
   getFilenameWithExtension,
   isAValidImageType,
 } from './helpers'
+import processor from './processor'
 
 const S3 = new AWS.S3()
 
 export const handler: AWSLambda.S3Handler = async (event) => {
   const bucketName = event.Records[0].s3.bucket.name
-  const destinationBucketName = process.env.DESTINATION_BUCKET || bucketName
+  const destinationBucketName = process.env.OUTPUT_BUCKET || bucketName
 
   const fileKey = formatURI(event.Records[0].s3.object.key)
   const fileExtension = getFileExtension(fileKey)
@@ -25,20 +25,19 @@ export const handler: AWSLambda.S3Handler = async (event) => {
   try {
     const originalFileInBucket = await S3.getObject({ Bucket: bucketName, Key: fileKey }).promise()
 
-    const processedImage = await sharp(originalFileInBucket.Body as Buffer)
-      .resize({ width: 500, withoutEnlargement: true })
-      .jpeg({ quality: 80, progressive: true, force: false })
-      .webp({ quality: 80, lossless: true, force: false })
-      .png({ quality: 80, compressionLevel: 8, force: false })
-      .toBuffer()
+    const processedImages = await processor(originalFileInBucket.Body as Buffer)
 
-    await S3.putObject({
-      Bucket: destinationBucketName,
-      Key: `${process.env.DESTINATION_FILE}/${filename}`,
-      Body: processedImage,
-      ContentType: `image/${fileExtension}`,
-      ACL: 'public-read',
-    }).promise()
+    const uploadImages = processedImages.map((imageInfo) => {
+      return S3.putObject({
+        Bucket: destinationBucketName,
+        Key: `${imageInfo.directory}/${filename}`,
+        Body: imageInfo.content,
+        ContentType: `image/${fileExtension}`,
+        ACL: 'public-read',
+      }).promise()
+    })
+
+    await Promise.all(uploadImages)
   } catch (e) {
     console.error(e)
   }
