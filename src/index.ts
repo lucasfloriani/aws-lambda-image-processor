@@ -23,26 +23,28 @@ export const handler: AWSLambda.S3Handler = async (event, context) => {
       return
     }
 
-    try {
-      const originalFileInBucket = await S3.getObject({ Bucket: bucketName, Key: fileKey }).promise()
-      const processedImages = await processor(originalFileInBucket.Body as Buffer)
+    const originalFileInBucket = await S3.getObject({ Bucket: bucketName, Key: fileKey }).promise()
+    const processedImages = await processor(originalFileInBucket.Body as Buffer)
 
-      const uploadImages = processedImages.map((imageInfo) => {
-        return S3.putObject({
-          Bucket: destinationBucketName,
-          Key: `${imageInfo.directory}/${filename}`,
-          Body: imageInfo.content,
-          ContentType: `image/${fileExtension}`,
-          ACL: 'public-read',
-        }).promise()
-      })
+    const uploadImages = processedImages.map((imageInfo) => {
+      return S3.putObject({
+        Bucket: destinationBucketName,
+        Key: `${imageInfo.directory}/${filename}`,
+        Body: imageInfo.content,
+        ContentType: `image/${fileExtension}`,
+        ACL: 'public-read',
+      }).promise()
+    })
 
-      await Promise.all(uploadImages)
-      context.succeed(`Processed image ${filename}`)
-    } catch (e) {
-      context.fail(`Error: ${e}`)
-    }
+    await Promise.all(uploadImages)
   })
 
-  await Promise.all(recordEvents)
+  try {
+    await Promise.all(recordEvents)
+    context.succeed(`Processed image(s) ${
+      event.Records.map(record => getFilenameWithExtension(record.s3.object.key)).join(' || ')
+    }`)
+  } catch (e) {
+    context.fail(`Error: ${e}`)
+  }
 }
