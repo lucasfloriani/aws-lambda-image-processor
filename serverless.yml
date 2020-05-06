@@ -27,11 +27,11 @@ functions:
       OUTPUT_BUCKET: ${env:OUTPUT_BUCKET}
     events:
       - s3:
-        bucket: ${env:INPUT_BUCKET}
-        event: s3:ObjectCreated:Put
-        rules:
-          - prefix: originals/
-        existing: true
+          bucket: ${env:INPUT_BUCKET}
+          event: s3:ObjectCreated:Put
+          rules:
+            - prefix: originals/
+          existing: true
 
 # If the OUTPUT BUCKET wasn't created, remove this commented code to create automatically
 # resources:
