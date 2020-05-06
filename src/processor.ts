@@ -44,10 +44,10 @@ const extraSmallSize = (originalFile: Buffer) => sharp(originalFile)
 const processor = async (originalFile: Buffer): Promise<ProcessorData[]> => {
   const processImageToBe = processImage(originalFile)
   return Promise.all([
-    processImageToBe(largeSize, './resized/large'),
-    processImageToBe(mediumSize, './resized/medium'),
-    processImageToBe(smallSize, './resized/small'),
-    processImageToBe(extraSmallSize, './resized/extra-small'),
+    processImageToBe(largeSize, 'resized/large'),
+    processImageToBe(mediumSize, 'resized/medium'),
+    processImageToBe(smallSize, 'resized/small'),
+    processImageToBe(extraSmallSize, 'resized/extra-small'),
   ])
 }
 
