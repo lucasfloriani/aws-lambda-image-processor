@@ -6,7 +6,6 @@ plugins:
 provider:
   name: aws
   runtime: nodejs12.x
-  stage: dev
   profile: default
   region: ${env:LAMBDA_REGION}
   iamRoleStatements:
@@ -22,7 +21,7 @@ provider:
       Resource: "arn:aws:s3:::${env:INPUT_BUCKET}/*"
 
 functions:
-  aws-lambda-image-processor:
+  processor:
     handler: dist/index.handler
     environment:
       OUTPUT_BUCKET: ${env:OUTPUT_BUCKET}
