@@ -33,11 +33,3 @@ functions:
           rules:
             - prefix: originals/
           existing: true
-
-# If the OUTPUT BUCKET wasn't created, remove this commented code to create automatically
-# resources:
-#   Resources:
-#     S3BucketOutputs:
-#       Type: AWS::S3::Bucket
-#       Properties:
-#         BucketName: ${env:OUTPUT_BUCKET}
