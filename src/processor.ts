@@ -14,6 +14,7 @@ const processImage = (originalFile: Buffer) => {
 }
 
 const largeSize = (originalFile: Buffer) => sharp(originalFile)
+  .withMetadata()
   .resize({ width: 1200, withoutEnlargement: true })
   .jpeg({ quality: 70, progressive: true, force: false })
   .webp({ quality: 70, lossless: true, force: false })
@@ -21,6 +22,7 @@ const largeSize = (originalFile: Buffer) => sharp(originalFile)
   .toBuffer()
 
 const mediumSize = (originalFile: Buffer) => sharp(originalFile)
+  .withMetadata()
   .resize({ height: 150, withoutEnlargement: true })
   .jpeg({ quality: 70, progressive: true, force: false })
   .webp({ quality: 70, lossless: true, force: false })
@@ -28,6 +30,7 @@ const mediumSize = (originalFile: Buffer) => sharp(originalFile)
   .toBuffer()
 
 const smallSize = (originalFile: Buffer) => sharp(originalFile)
+  .withMetadata()
   .resize({ width: 100, withoutEnlargement: true })
   .jpeg({ quality: 70, progressive: true, force: false })
   .webp({ quality: 70, lossless: true, force: false })
@@ -35,6 +38,7 @@ const smallSize = (originalFile: Buffer) => sharp(originalFile)
   .toBuffer()
 
 const extraSmallSize = (originalFile: Buffer) => sharp(originalFile)
+  .withMetadata()
   .resize({ width: 70, withoutEnlargement: true })
   .jpeg({ quality: 70, progressive: true, force: false })
   .webp({ quality: 70, lossless: true, force: false })
