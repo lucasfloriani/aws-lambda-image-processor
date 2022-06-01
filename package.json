@@ -49,6 +49,6 @@
   "dependencies": {
     "aws-lambda": "^1.0.6",
     "aws-sdk": "^2.669.0",
-    "sharp": "^0.25.2"
+    "sharp": "^0.30.5"
   }
 }
